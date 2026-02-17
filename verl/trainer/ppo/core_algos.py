@@ -1189,6 +1189,7 @@ def compute_policy_loss_vanilla(
             log probabilities of actions under the rollout policy, shape (batch_size, response_length).
     """
 
+    import pdb; pdb.set_trace()
     assert config is not None
     assert not isinstance(config, AlgoConfig)
     clip_ratio = config.clip_ratio  # Clipping parameter ε for standard PPO. See https://arxiv.org/abs/1707.06347.
