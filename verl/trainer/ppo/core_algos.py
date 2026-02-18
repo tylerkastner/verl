@@ -1231,7 +1231,8 @@ def compute_policy_loss_vanilla(
         torch.gt(clip_pg_losses1, pg_losses3) * (advantages < 0).float(), response_mask
     )
 
-    pg_losses = torch.where(advantages < 0, clip_pg_losses2, clip_pg_losses1)
+    # pg_losses = torch.where(advantages < 0, clip_pg_losses2, clip_pg_losses1)
+    pg_losses = clip_pg_losses1
 
     # Apply rollout correction weights if provided
     if rollout_is_weights is not None:
