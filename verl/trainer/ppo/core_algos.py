@@ -1229,18 +1229,14 @@ def compute_policy_loss_vanilla(
 
     # NOT USED 
     # ----
-    pg_losses3 = -advantages * clip_ratio_c
-    clip_pg_losses2 = torch.min(pg_losses3, clip_pg_losses1)
+    # pg_losses3 = -advantages * clip_ratio_c
+    # clip_pg_losses2 = torch.min(pg_losses3, clip_pg_losses1)
+
     pg_clipfrac_lower = verl_F.masked_mean(
-        torch.gt(clip_pg_losses1, pg_losses3) * (advantages < 0).float(), response_mask
+        # torch.gt(clip_pg_losses1, pg_losses3) * (advantages < 0).float(), response_mask
+        torch.gt(clip_pg_losses1, clip_pg_losses1) * (advantages < 0).float(), response_mask
     )
     # ----
-
-
-    clip_pg_losses2 = torch.min(pg_losses3, clip_pg_losses1)
-    pg_clipfrac_lower = verl_F.masked_mean(
-        torch.gt(clip_pg_losses1, pg_losses3) * (advantages < 0).float(), response_mask
-    )
 
     pg_losses = torch.where(advantages < 0, clip_pg_losses2, clip_pg_losses1)
 
