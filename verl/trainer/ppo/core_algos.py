@@ -1239,11 +1239,14 @@ def compute_policy_loss_vanilla(
     # pg_losses = torch.where(advantages < 0, clip_pg_losses2, clip_pg_losses1)
     # pg_losses = clip_pg_losses1
 
-    pg_losses = torch.where(
-        advantages > 0,
-        -advantages * torch.minimum(ratio, 1 + cliprange_high),
-        -advantages * torch.maximum(ratio, 1 - cliprange_low)
-    )
+    # pg_losses = torch.where(
+    #     advantages > 0,
+    #     -advantages * torch.minimum(ratio, 1 + cliprange_high),
+    #     -advantages * torch.maximum(ratio, 1 - cliprange_low)
+    # )
+
+    ratio_clipped = ratio.clamp(1.0 - cliprange_low, 1.0 + cliprange_high)
+    pg_losses = -advantages * torch.where(advantages > 0, torch.minimum(ratio, ratio_clipped), torch.maximum(ratio, ratio_clipped))
 
 
     # Apply rollout correction weights if provided
